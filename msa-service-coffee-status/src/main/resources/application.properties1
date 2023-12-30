@@ -4,3 +4,6 @@ spring.datasource.username=root
 spring.datasource.password=wodyd78910**
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jackson.time-zone=Asia/Seoul
+
+spring.config.import=optional:configserver:
+eureka.client.optionalArgs=com.netflix.discovery.MyCustomDiscoveryClientOptionalArgs
