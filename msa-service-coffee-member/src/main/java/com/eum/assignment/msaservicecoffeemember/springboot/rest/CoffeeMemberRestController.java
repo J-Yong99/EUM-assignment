@@ -1,7 +1,8 @@
 package com.eum.assignment.msaservicecoffeemember.springboot.rest;
 
-import com.eum.assignment.msaservicecoffeemember.springboot.repository.ICoffeeMemberMapper;
 import com.eum.assignment.msaservicecoffeemember.springboot.repository.dvo.MemberDVO;
+import com.eum.assignment.msaservicecoffeemember.springboot.repository.jpa.ICoffeeMemberJpaRepository;
+import com.eum.assignment.msaservicecoffeemember.springboot.repository.jpa.Member;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CoffeeMemberRestController {
     @Autowired
-    ICoffeeMemberMapper iCoffeeMemberMapper;
+    private ICoffeeMemberJpaRepository iCoffeeMemberJpaRepository;
 
     @HystrixCommand
     @GetMapping("/coffeeMember/v1.0/{memberName}")
@@ -19,7 +20,7 @@ public class CoffeeMemberRestController {
         MemberDVO memberDVO = new MemberDVO();
         memberDVO.setMemberName(memberName);
 
-        return !iCoffeeMemberMapper.existsByMemberName(memberDVO).getMemberName().isEmpty();
+        return iCoffeeMemberJpaRepository.existsByMemberName(memberName);
     }
 
 //    @HystrixCommand
@@ -40,15 +41,16 @@ public class CoffeeMemberRestController {
         return "fallbackFunction";
     }
 
-    @HystrixCommand
-    @PutMapping("/createMemberTable")
-    public void createMemberTable() {
-        iCoffeeMemberMapper.createMemberTable();
-    }
 
     @HystrixCommand
     @PutMapping("/insertMemberData")
     public void insertMemberData() {
-        iCoffeeMemberMapper.insertMemberData();
+        // random String name
+        String memberName = "sampleMember" + (int)(Math.random() * 1000);
+        iCoffeeMemberJpaRepository.save(
+                Member.builder()
+                        .memberName(memberName)
+                        .build()
+        );
     }
 }
