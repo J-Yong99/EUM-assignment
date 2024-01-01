@@ -15,7 +15,7 @@ import lombok.*;
 public class OrderEntityJPO {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
     private String orderNumber;
     private String coffeeName;
     private String coffeeCount;
