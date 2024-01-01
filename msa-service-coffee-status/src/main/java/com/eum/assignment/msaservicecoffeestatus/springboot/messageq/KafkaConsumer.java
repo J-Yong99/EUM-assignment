@@ -1,7 +1,8 @@
 package com.eum.assignment.msaservicecoffeestatus.springboot.messageq;
 
-import com.eum.assignment.msaservicecoffeestatus.springboot.repository.ICoffeeStatusMapper;
 import com.eum.assignment.msaservicecoffeestatus.springboot.repository.dvo.OrderStatusDVO;
+import com.eum.assignment.msaservicecoffeestatus.springboot.repository.jpa.IOrderStatusJpaRepository;
+import com.eum.assignment.msaservicecoffeestatus.springboot.repository.jpa.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -9,14 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer {
     @Autowired
-    ICoffeeStatusMapper iCoffeeStatusMapper;
+    private IOrderStatusJpaRepository insertCoffeeOrderStatus;
 
-    @KafkaListener(topics = "kafka-test")
+    @KafkaListener(topics = "kafka-test", groupId = "test-group")
     public void processMessage(String kafkaMessage) {
         System.out.println("kafkaMessage: " + kafkaMessage);
-        OrderStatusDVO orderStatusDVO = new OrderStatusDVO();
-        orderStatusDVO.setOrderHistory(kafkaMessage);
+        OrderStatus orderStatus = OrderStatus.builder().orderStatus("ORDERED").orderHistory(kafkaMessage).build();
 
-        iCoffeeStatusMapper.insertCoffeeOrderStatus(orderStatusDVO);
+        insertCoffeeOrderStatus.save(orderStatus);
     }
 }
