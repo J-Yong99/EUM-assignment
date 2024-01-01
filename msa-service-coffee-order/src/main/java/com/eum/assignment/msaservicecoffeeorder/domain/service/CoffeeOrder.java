@@ -12,7 +12,7 @@ public class CoffeeOrder implements ICoffeeOrder{
     }
 
     @Override
-    public String coffeeOrder(CoffeeOrderCVO coffeeOrderCVO) {
+    public Long coffeeOrder(CoffeeOrderCVO coffeeOrderCVO) {
         OrderEntity orderEntity = OrderEntity.builder()
                 .orderNumber(coffeeOrderCVO.getOrderNumber())
                 .coffeeName(coffeeOrderCVO.getCoffeeName())
