@@ -1,16 +1,29 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   config:
     import: "optional:configserver:http://localhost:8888/"
   cloud:
     config:
-      name: coffee
+      name: msa
       profile: member
+  application:
+    name: msa-service-coffee-member
 
   datasource:
     url: jdbc:mysql://localhost:3306/msa_member?createDatabaseIfNotExist=TRUE&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     username: root
     password: wodyd78910**
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:9091/eureka
