@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class OrderEntity {
-    private String id;
+    private Long id;
     private String orderNumber;
     private String coffeeName;
     private String coffeeCount;
